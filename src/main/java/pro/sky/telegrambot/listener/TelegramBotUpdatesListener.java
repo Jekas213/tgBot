@@ -49,9 +49,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             } else if (matcher.matches()) {
                 LocalDateTime dateTime = pars(matcher.group(1));
                 String message = matcher.group(2);
-                assert dateTime != null;
-                notificationTaskService.save(chatId, message, dateTime);
-                sendMessage(chatId, "Задача записана");
+                if (dateTime != null) {
+                    notificationTaskService.save(chatId, message, dateTime);
+                    sendMessage(chatId, "Задача записана");
+                }
             } else {
                 sendMessage(chatId, "введите /start либо задачу в формате дд.мм.гггг вв:вв Задача");
             }
@@ -62,7 +63,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     @Nullable
     private LocalDateTime pars(String dateTime) {
         try {
-            return LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            return LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
         } catch (DateTimeParseException e) {
             return null;
         }

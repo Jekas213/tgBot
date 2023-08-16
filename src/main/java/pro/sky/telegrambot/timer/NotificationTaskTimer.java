@@ -31,6 +31,7 @@ public class NotificationTaskTimer {
                     SendMessage message = new SendMessage(notificationTask.getChatId(),
                             notificationTask.getText());
                     SendResponse response = telegramBot.execute(message);
+                    notificationTaskRepository.delete(notificationTask);
                     if (!response.isOk()) {
                         logger.error("failed: " + response.description());
                     }
